@@ -5,6 +5,8 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import type { ReactNode } from "react";
 import { useEffect, useRef } from "react";
 import { Provider } from "react-redux";
+import { Persistor, persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
 interface Props {
   readonly children: ReactNode;
@@ -12,10 +14,12 @@ interface Props {
 
 export const StoreProvider = ({ children }: Props) => {
   const storeRef = useRef<AppStore | null>(null);
+  const persistorRef = useRef<Persistor | null>(null);
 
   if (!storeRef.current) {
     // Create the store instance the first time this renders
     storeRef.current = makeStore();
+    persistorRef.current = persistStore(makeStore());
   }
 
   useEffect(() => {
@@ -26,6 +30,12 @@ export const StoreProvider = ({ children }: Props) => {
       return unsubscribe;
     }
   }, []);
-
-  return <Provider store={storeRef.current}>{children}</Provider>;
+  if (persistorRef.current === null) return null;
+  return (
+    <Provider store={storeRef.current}>
+      <PersistGate loading={null} persistor={persistorRef.current}>
+        {children}
+      </PersistGate>
+    </Provider>
+  );
 };
