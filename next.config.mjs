@@ -8,9 +8,10 @@ const __dirname = dirname(__filename);
 
 const nextConfig = {
   reactStrictMode: true,
+
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
-    prependData: `@import "./base.scss";`,
+    prependData: `@import "@/styles/variables.scss";`,
   },
   devIndicators: {
     // buildActivity: false,

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Counter } from "./components/counter/Counter";
-
+import Header from "@/components/Header";
 export default function IndexPage() {
   return (
     <div>
+      <Header />
       <h1>Welcome</h1>
     </div>
   );
